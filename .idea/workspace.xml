@@ -2,20 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="70dfc7b6-b045-416b-b397-a34cd43013f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/MLKits.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/knn-tf/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/knn-tf/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/knn-tf/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/knn-tf/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/knn-tf/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/knn-tf/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plinko/score.js" beforeDir="false" afterPath="$PROJECT_DIR$/plinko/score.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/regressions/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/regressions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/regressions/linear-regression.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regressions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -52,7 +53,7 @@
       <workItem from="1596782780119" duration="6508000" />
       <workItem from="1596840520259" duration="15335000" />
       <workItem from="1596930232161" duration="3595000" />
-      <workItem from="1597047078806" duration="1078000" />
+      <workItem from="1597047078806" duration="8368000" />
     </task>
     <servers />
   </component>
