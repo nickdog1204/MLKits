@@ -5,21 +5,23 @@ class LinearRegression {
     constructor(features, labels, options) {
         this.features = this.processFeatures(features)
         this.labels = tf.tensor2d(labels)
+        this.mseHistory = []
+        // this.bHistory = []
 
 
         this.options = Object.assign({learningRate: 0.1, maxIterations: 1000}, options)
 
-        this.weights = tf.zeros([2, 1])
+        this.weights = tf.zeros([this.features.shape[1], 1])
     }
 
-    gradientDescent() {
-        const currentGuesses = this.features.matMul(this.weights)
-        const differences = currentGuesses.sub(this.labels)
+    gradientDescent(features, labels) {
+        const currentGuesses = features.matMul(this.weights)
+        const differences = currentGuesses.sub(labels)
 
-        const slopes = this.features
+        const slopes = features
             .transpose()
             .matMul(differences)
-            .div(this.features.shape[0])
+            .div(features.shape[0])
         // .mul(2)
         this.weights = this.weights.sub(slopes.mul(this.options.learningRate))
     }
@@ -37,9 +39,23 @@ class LinearRegression {
     // }
 
     train() {
+        const batchQuantity = Math.floor(this.features.shape[0] / this.options.batchSize)
         for (let i = 0; i < this.options.maxIterations; i++) {
-            this.gradientDescent()
+            for (let j = 0; j < batchQuantity; j++) {
+                const startIndex = j * this.options.batchSize
+                const {batchSize} = this.options
+                const featureSlice = this.features.slice([startIndex, 0], [batchSize, -1])
+                const labelSlice = this.labels.slice([startIndex, 0], [batchSize, -1])
+
+                this.gradientDescent(featureSlice, labelSlice)
+            }
+            this.recordMSE()
+            this.updateLearningRate()
         }
+    }
+
+    predict(observations) {
+        return this.processFeatures(observations).matMul(this.weights)
     }
 
     test(testFeatures, testLabels) {
@@ -82,6 +98,32 @@ class LinearRegression {
         return features.sub(mean).div(variance.pow(0.5))
     }
 
+    recordMSE() {
+        const mse = this.features
+            .matMul(this.weights)
+            .sub(this.labels)
+            .pow(2)
+            .sum()
+            .div(this.features.shape[0])
+            .arraySync()
+        this.mseHistory.unshift(mse)
+    }
+
+    updateLearningRate() {
+        if (this.mseHistory.length < 2) {
+            return
+        }
+        const lastValue = this.mseHistory[0]
+        const secondLast = this.mseHistory[1]
+        if (lastValue > secondLast) {
+            // bad update
+            this.options.learningRate /= 2
+        } else {
+            // right direction
+            this.options.learningRate *= 1.05
+        }
+
+    }
 }
 
 module.exports = LinearRegression
