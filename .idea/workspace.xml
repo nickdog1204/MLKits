@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="70dfc7b6-b045-416b-b397-a34cd43013f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/regressions/linear-regression.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/regressions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regressions/linear-regression.js" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/linear-regression.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +53,8 @@
       <workItem from="1596782780119" duration="6508000" />
       <workItem from="1596840520259" duration="15335000" />
       <workItem from="1596930232161" duration="3595000" />
-      <workItem from="1597047078806" duration="8368000" />
+      <workItem from="1597047078806" duration="9640000" />
+      <workItem from="1597103850139" duration="13652000" />
     </task>
     <servers />
   </component>

@@ -3,33 +3,83 @@ const _ = require('lodash')
 
 class LinearRegression {
     constructor(features, labels, options) {
-        this.features = features
-        console.log("features", features)
-        this.labels = labels
-        console.log("labels", labels)
+        this.features = this.processFeatures(features)
+        this.labels = tf.tensor2d(labels)
+
+
         this.options = Object.assign({learningRate: 0.1, maxIterations: 1000}, options)
 
-        this.m = 0
-        this.b = 0
-        const currentGuessesForMPG = this.features.map(row => this.m * row[0] + this.b)
+        this.weights = tf.zeros([2, 1])
     }
 
     gradientDescent() {
-        const currentGuessesForMPG = this.features.map(row => this.m * row[0] + this.b)
-        const bSlope = _.sum(
-            currentGuessesForMPG.map((guess, i) => guess - this.labels[i][0])
-        ) * 2 / this.features.length
-        const mSlope =
-            _.sum(currentGuessesForMPG.map((guess, i) => -1 * this.features[i][0] * (this.labels[i][0] - guess))) * 2 / this.features.length
+        const currentGuesses = this.features.matMul(this.weights)
+        const differences = currentGuesses.sub(this.labels)
 
-        this.m = this.m - mSlope * this.options.learningRate
-        this.b = this.b - bSlope * this.options.learningRate
+        const slopes = this.features
+            .transpose()
+            .matMul(differences)
+            .div(this.features.shape[0])
+        // .mul(2)
+        this.weights = this.weights.sub(slopes.mul(this.options.learningRate))
     }
+
+    // gradientDescent() {
+    //     const currentGuessesForMPG = this.features.map(row => this.m * row[0] + this.b)
+    //     const bSlope = _.sum(
+    //         currentGuessesForMPG.map((guess, i) => guess - this.labels[i][0])
+    //     ) * 2 / this.features.length
+    //     const mSlope =
+    //         _.sum(currentGuessesForMPG.map((guess, i) => -1 * this.features[i][0] * (this.labels[i][0] - guess))) * 2 / this.features.length
+    //
+    //     this.m = this.m - mSlope * this.options.learningRate
+    //     this.b = this.b - bSlope * this.options.learningRate
+    // }
 
     train() {
         for (let i = 0; i < this.options.maxIterations; i++) {
             this.gradientDescent()
         }
+    }
+
+    test(testFeatures, testLabels) {
+        testFeatures = this.processFeatures(testFeatures)
+        testLabels = tf.tensor2d(testLabels)
+
+
+        const predictions = testFeatures.matMul(this.weights)
+
+        const res = testLabels.sub(predictions)
+            .pow(2)
+            .sum()
+            .dataSync()
+        const tot = testLabels.sub(testLabels.mean())
+            .pow(2)
+            .sum()
+            .dataSync()
+        return 1 - res / tot;
+
+    }
+
+    processFeatures(features) {
+        features = tf.tensor(features)
+
+        if (this.mean && this.variance) {
+            features = features.sub(this.mean).div(this.variance.pow(0.5))
+        } else {
+            features = this.standardize(features)
+        }
+
+        features = tf.ones([features.shape[0], 1])
+            .concat(features, 1)
+        return features
+    }
+
+    standardize(features) {
+        const {mean, variance} = tf.moments(features, 0)
+        this.mean = mean
+        this.variance = variance
+        return features.sub(mean).div(variance.pow(0.5))
     }
 
 }
