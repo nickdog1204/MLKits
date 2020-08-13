@@ -2,7 +2,7 @@
   "name": "logistic_regression",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "linear-regression/index.js",
   "scripts": {},
   "author": "",
   "license": "ISC",

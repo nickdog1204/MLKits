@@ -1,21 +1,25 @@
-const tf = require("@tensorflow/tfjs-node")
+const tf = require("@tensorflow/tfjs")
 const _ = require('lodash')
 
-class LinearRegression {
+class LogisticRegression {
     constructor(features, labels, options) {
-        this.features = this.processFeatures(features)
+        this.features = this.processFeatures(features);
         this.labels = tf.tensor2d(labels)
-        this.mseHistory = []
+        this.costHistory = []
         // this.bHistory = []
 
 
-        this.options = Object.assign({learningRate: 0.1, maxIterations: 1000}, options)
+        this.options = Object.assign({
+            learningRate: 0.1,
+            maxIterations: 1000,
+            decisionBoundary: 0.5
+        }, options)
 
         this.weights = tf.zeros([this.features.shape[1], 1])
     }
 
     gradientDescent(features, labels) {
-        const currentGuesses = features.matMul(this.weights)
+        const currentGuesses = features.matMul(this.weights).sigmoid()
         const differences = currentGuesses.sub(labels)
 
         const slopes = features
@@ -26,20 +30,9 @@ class LinearRegression {
         this.weights = this.weights.sub(slopes.mul(this.options.learningRate))
     }
 
-    // gradientDescent() {
-    //     const currentGuessesForMPG = this.features.map(row => this.m * row[0] + this.b)
-    //     const bSlope = _.sum(
-    //         currentGuessesForMPG.map((guess, i) => guess - this.labels[i][0])
-    //     ) * 2 / this.features.length
-    //     const mSlope =
-    //         _.sum(currentGuessesForMPG.map((guess, i) => -1 * this.features[i][0] * (this.labels[i][0] - guess))) * 2 / this.features.length
-    //
-    //     this.m = this.m - mSlope * this.options.learningRate
-    //     this.b = this.b - bSlope * this.options.learningRate
-    // }
 
     train() {
-        const batchQuantity = Math.floor(this.features.shape[0] / this.options.batchSize)
+        const batchQuantity = Math.floor(this.features.shape[0] / this.options.batchSize);
         for (let i = 0; i < this.options.maxIterations; i++) {
             for (let j = 0; j < batchQuantity; j++) {
                 const startIndex = j * this.options.batchSize
@@ -49,32 +42,28 @@ class LinearRegression {
 
                 this.gradientDescent(featureSlice, labelSlice)
             }
-            this.recordMSE()
+            this.recordCost()
             this.updateLearningRate()
         }
     }
 
     predict(observations) {
-        return this.processFeatures(observations).matMul(this.weights)
+        return this.processFeatures(observations)
+            .matMul(this.weights)
+            .sigmoid()
+            .greater(this.options.decisionBoundary) // dtype => bool
+            .cast('float32')
     }
 
     test(testFeatures, testLabels) {
-        testFeatures = this.processFeatures(testFeatures)
-        testLabels = tf.tensor2d(testLabels)
+        const predictionsTensor = this.predict(testFeatures)
+        const testLabelsTensor = tf.tensor2d(testLabels)
 
-
-        const predictions = testFeatures.matMul(this.weights)
-
-        const res = testLabels.sub(predictions)
-            .pow(2)
+        const incorrectTensor = predictionsTensor
+            .sub(testLabelsTensor)
+            .abs()
             .sum()
-            .dataSync()
-        const tot = testLabels.sub(testLabels.mean())
-            .pow(2)
-            .sum()
-            .dataSync()
-        return 1 - res / tot;
-
+        return (predictionsTensor.shape[0] - incorrectTensor.dataSync()[0]) / predictionsTensor.shape[0]
     }
 
     processFeatures(features) {
@@ -98,24 +87,29 @@ class LinearRegression {
         return features.sub(mean).div(variance.pow(0.5))
     }
 
-    recordMSE() {
-        const mse = this.features
-            .matMul(this.weights)
-            .sub(this.labels)
-            .pow(2)
-            .sum()
+    recordCost() {
+        const guesses = this.features.matMul(this.weights).sigmoid()
+        const termOne = this.labels.transpose().matMul(guesses.log())
+        const termTwo = this.labels
+            .mul(-1)
+            .add(1)
+            .transpose()
+            .matMul(
+                guesses.mul(-1).add(1).log()
+            )
+
+        const cost = termOne.add(termTwo)
             .div(this.features.shape[0])
-            .arraySync()
-        this.mseHistory.unshift(mse)
+            .mul(-1)
+            .dataSync()[0]
+        this.costHistory.unshift(cost)
     }
 
     updateLearningRate() {
-        if (this.mseHistory.length < 2) {
+        if (this.costHistory.length < 2) {
             return
         }
-        const lastValue = this.mseHistory[0]
-        const secondLast = this.mseHistory[1]
-        if (lastValue > secondLast) {
+        if (this.costHistory[0] > this.costHistory[1]) {
             // bad update
             this.options.learningRate /= 2
         } else {
@@ -126,4 +120,4 @@ class LinearRegression {
     }
 }
 
-module.exports = LinearRegression
+module.exports = LogisticRegression
