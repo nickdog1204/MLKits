@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70dfc7b6-b045-416b-b397-a34cd43013f4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/logistic-regression.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/plot.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/memory.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/logistic-regression.js" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/logistic-regression.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/regressions/multinomial-logistic-regression-image-recognition/plot.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +76,7 @@
       <workItem from="1597454098311" duration="8347000" />
       <workItem from="1597526818399" duration="1427000" />
       <workItem from="1597561379758" duration="164000" />
+      <workItem from="1597647068721" duration="12348000" />
     </task>
     <servers />
   </component>
